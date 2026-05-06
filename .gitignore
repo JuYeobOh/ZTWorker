@@ -41,6 +41,7 @@ temp/
 .omx/
 .claude/
 CLAUDE.md
+AGENTS.md
 
 # ── IDE ───────────────────────────────────────────────────────
 .idea/

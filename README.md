@@ -300,7 +300,7 @@ docker logs zt-enterprise-hr-enter-hr-staff -f   # 특정 Agent 로그
 `profiles/`는 브라우저 세션 cache라 의도적으로 제외.
 
 ### 1) AWS 준비
-- S3 버킷 생성 (예: `kmuinfosec-lab-zt-testbed-logs`).
+- S3 버킷 생성 (예: `<your-s3-bucket>`).
 - EC2 Instance Profile에 IAM 정책 부여:
   ```json
   {
@@ -309,8 +309,8 @@ docker logs zt-enterprise-hr-enter-hr-staff -f   # 특정 Agent 로그
       "Effect": "Allow",
       "Action": ["s3:ListBucket", "s3:PutObject", "s3:GetObject"],
       "Resource": [
-        "arn:aws:s3:::kmuinfosec-lab-zt-testbed-logs",
-        "arn:aws:s3:::kmuinfosec-lab-zt-testbed-logs/*"
+        "arn:aws:s3:::<your-s3-bucket>",
+        "arn:aws:s3:::<your-s3-bucket>/*"
       ]
     }]
   }
@@ -320,7 +320,7 @@ docker logs zt-enterprise-hr-enter-hr-staff -f   # 특정 Agent 로그
 ### 2) 환경 파일 작성
 ```bash
 sudo tee /etc/zt/sync.env >/dev/null <<'EOF'
-ZT_S3_BUCKET=kmuinfosec-lab-zt-testbed-logs
+ZT_S3_BUCKET=<your-s3-bucket>
 ZT_S3_PREFIX=agent
 EOF
 sudo chmod 600 /etc/zt/sync.env
@@ -340,7 +340,7 @@ sudo systemctl enable --now zt-sync-results.timer
 systemctl list-timers | grep zt-sync                 # 다음 트리거 시각
 sudo systemctl start zt-sync-results.service         # 즉시 1회 실행
 journalctl -u zt-sync-results.service -n 100         # 결과 로그
-aws s3 ls s3://kmuinfosec-lab-zt-testbed-logs/agent/results/ --recursive | head
+aws s3 ls s3://<your-s3-bucket>/agent/results/ --recursive | head
 ```
 
 ### sync 정책 메모
