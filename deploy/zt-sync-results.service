@@ -7,7 +7,7 @@ Wants=network-online.target
 Type=oneshot
 # /etc/zt/sync.env 가 없으면 무시(`-` prefix). 있다면 로드.
 EnvironmentFile=-/etc/zt/sync.env
-ExecStart=/opt/zt-worker/worker/deploy/zt-sync-results.sh
+ExecStart=/opt/zt-worker/deploy/zt-sync-results.sh
 
 # 로그는 journald
 StandardOutput=journal
