@@ -22,7 +22,8 @@ set -euo pipefail
 S3_PREFIX="${S3_PREFIX:-agent}"
 
 echo "==[1/7] 패키지 설치"
-dnf install -y git docker python3-pip
+# Amazon Linux 2023 기본 python은 3.9 — pyproject가 3.11+ 요구이므로 python3.11 별도 설치.
+dnf install -y git docker python3.11 python3.11-pip
 
 echo "==[2/7] Docker 데몬 + Compose/Buildx 플러그인"
 systemctl enable --now docker
@@ -43,7 +44,11 @@ mkdir -p /opt /etc/zt
 if [[ ! -d /opt/zt-worker/.git ]]; then
     git clone "https://github.com/${GIT_USER}/ZTWorker.git" /opt/zt-worker
 fi
-python3 -m venv /opt/zt-worker/.venv
+# python3.11 venv (pyproject가 3.11+ 요구)
+if [[ ! -x /opt/zt-worker/.venv/bin/python3.11 ]]; then
+    rm -rf /opt/zt-worker/.venv
+    python3.11 -m venv /opt/zt-worker/.venv
+fi
 /opt/zt-worker/.venv/bin/pip install --upgrade pip
 /opt/zt-worker/.venv/bin/pip install -e /opt/zt-worker
 ln -sf /opt/zt-worker/.venv/bin/zt-worker /usr/local/bin/zt-worker
