@@ -1,0 +1,14 @@
+[Unit]
+Description=ZeroTrust results/logs sync to S3
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# /etc/zt/sync.env 가 없으면 무시(`-` prefix). 있다면 로드.
+EnvironmentFile=-/etc/zt/sync.env
+ExecStart=/opt/zt-worker/worker/deploy/zt-sync-results.sh
+
+# 로그는 journald
+StandardOutput=journal
+StandardError=journal

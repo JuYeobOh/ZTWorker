@@ -1,0 +1,23 @@
+# zt-worker configuration example
+# Copy to worker.yaml and edit as needed.
+# CLI options override values in this file.
+
+worker_id: enterprise-hr-worker          # optional: appears as WORKER_ID env var in containers
+
+mode: enterprise                         # enterprise | branch | cafe
+location_id: enterprise-hr              # omit to run all employees for the mode
+                                         # required for cafe mode
+
+controller_url: http://controller.internal:8443
+# 토큰 인증은 사용하지 않는다. Controller는 SG/NACL로 직원망 VPC에서만 도달 가능.
+
+# 모든 컨테이너 공통 시크릿. 이 파일이 평문이므로 chmod 600, root 소유 필수.
+# 운영 시: /etc/zt/worker.yaml로 배치
+llm_api_key: REPLACE_ME_WITH_LLM_API_KEY
+
+data_root: /data/zt                      # EBS mount root for profile/results/logs
+employee_image: employee-agent:latest    # Docker image for all employee containers
+
+restart_policy: unless-stopped           # Docker restart policy
+shm_size: 2g                             # Shared memory for browser inside container
+supervise_interval_seconds: 30           # How often supervise loop checks container health

@@ -1,0 +1,14 @@
+[Unit]
+Description=ZeroTrust S3 sync — hourly
+
+[Timer]
+# 매시간 정각에 트리거. RandomizedDelaySec으로 EC2별 0~3분 랜덤 지연 →
+# 4대가 동시에 S3에 몰리는 것을 분산.
+OnCalendar=hourly
+RandomizedDelaySec=180
+
+# 부팅 시 직전 누락분 1회 catch-up
+Persistent=true
+
+[Install]
+WantedBy=timers.target
