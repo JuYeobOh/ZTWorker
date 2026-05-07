@@ -63,10 +63,9 @@ echo "==[5/7] systemd unit + sync/update 스크립트 권한"
 cp /opt/zt-worker/deploy/zt-worker.service       /etc/systemd/system/
 cp /opt/zt-worker/deploy/zt-sync-results.service /etc/systemd/system/
 cp /opt/zt-worker/deploy/zt-sync-results.timer   /etc/systemd/system/
-cp /opt/zt-worker/deploy/zt-update-agent.service /etc/systemd/system/
-cp /opt/zt-worker/deploy/zt-update-agent.timer   /etc/systemd/system/
 chmod +x /opt/zt-worker/deploy/zt-sync-results.sh
 chmod +x /opt/zt-worker/deploy/update-agent.sh
+# update-agent.sh는 SSM 수동 명령으로만 호출 (auto polling timer 없음).
 
 echo "==[6/7] /etc/zt/worker.yaml + sync.env"
 cat > /etc/zt/worker.yaml <<EOF
@@ -92,7 +91,7 @@ chmod 600 /etc/zt/sync.env
 
 echo "==[7/7] systemd 등록·시작"
 systemctl daemon-reload
-systemctl enable --now zt-worker zt-sync-results.timer zt-update-agent.timer
+systemctl enable --now zt-worker zt-sync-results.timer
 
 echo
 echo "── DONE ── ${WORKER_ID} (${MODE}/${LOCATION})"

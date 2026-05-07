@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# Agent / Worker 배포 갱신.
+# Agent / Worker 배포 갱신 — SSM Run Command 수동 트리거 전용.
+# (자동 폴링 타이머 없음. 5일 수집 중 컨테이너 무중단 보장을 위해 사용자가 명시 호출할 때만 동작.)
+#
+# 동작:
 # - /opt/zt-agent + /opt/zt-worker git pull
 # - Agent 변경 있으면 이미지 재빌드
 # - Worker 변경 있으면 venv editable install 갱신 (의존성 변경 대비)
@@ -8,11 +11,11 @@
 #
 # SSM 사용 예:
 #   aws ssm send-command --document-name AWS-RunShellScript \
-#     --targets Key=tag:Role,Values=zt-worker \
-#     --parameters 'commands=["bash /opt/zt-worker/deploy/update-agent.sh"]'
+#     --targets "Key=tag:Name,Values=hr,sales,fin,dev,it,outdoor1,outdoor2" \
+#     --parameters '{"commands":["bash /opt/zt-worker/deploy/update-agent.sh"]}'
 #
-#   yaml만 바꾸고 강제 재배치할 때:
-#     ... 'commands=["bash /opt/zt-worker/deploy/update-agent.sh --force"]'
+#   yaml만 바꾸고 강제 재배치할 때 (--force):
+#     ... '{"commands":["bash /opt/zt-worker/deploy/update-agent.sh --force"]}'
 
 set -euo pipefail
 
