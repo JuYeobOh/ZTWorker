@@ -21,3 +21,10 @@ employee_image: employee-agent:latest    # Docker image for all employee contain
 restart_policy: unless-stopped           # Docker restart policy
 shm_size: 2g                             # Shared memory for browser inside container
 supervise_interval_seconds: 30           # How often supervise loop checks container health
+
+# Agent 운영 다이얼 (KST 기준). Worker가 컨테이너 env로 주입한다.
+# 운영 기본: Controller 06:00 plan 생성 → Agent 06:30 fetch.
+# 테스트 시: plan_fetch_hour: 1, plan_fetch_minute: 10 식으로 override.
+plan_fetch_hour: 6
+plan_fetch_minute: 30
+error_retry_seconds: 60                  # main loop 예외 시 다음 시도까지 sleep (초)

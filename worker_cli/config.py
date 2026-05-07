@@ -22,6 +22,11 @@ class WorkerConfig(BaseModel):
     shm_size: str = "2g"
     supervise_interval_seconds: int = 30
 
+    # ── Agent 운영 다이얼 (Worker가 컨테이너 env로 주입). 모두 KST 기준. ──
+    plan_fetch_hour: int = 6
+    plan_fetch_minute: int = 30
+    error_retry_seconds: int = 60
+
     @field_validator("mode")
     @classmethod
     def validate_mode(cls, v: str) -> str:
@@ -75,6 +80,7 @@ def build_config(
         "supervise_interval_seconds": supervise_interval_seconds,
         "worker_id": worker_id,
     }
+    # plan_fetch_*, error_retry_seconds 는 CLI 옵션으로 노출하지 않음 (worker.yaml에서만)
     for k, v in overrides.items():
         if v is not None:
             base[k] = v

@@ -36,11 +36,14 @@ def build_spec(
     loc = target.location_id
 
     env: dict[str, str] = {
-        "EMPLOYEE_ID":    emp.employee_id,
-        "LOCATION_ID":    loc,
-        "WORKER_GROUP":   emp.worker_group,
-        "CONTROLLER_URL": cfg.controller_url,
-        "LLM_API_KEY":    cfg.llm_api_key,
+        "EMPLOYEE_ID":         emp.employee_id,
+        "LOCATION_ID":         loc,
+        "WORKER_GROUP":        emp.worker_group,
+        "CONTROLLER_URL":      cfg.controller_url,
+        "LLM_API_KEY":         cfg.llm_api_key,
+        "PLAN_FETCH_HOUR":     str(cfg.plan_fetch_hour),
+        "PLAN_FETCH_MINUTE":   str(cfg.plan_fetch_minute),
+        "ERROR_RETRY_SECONDS": str(cfg.error_retry_seconds),
     }
     if cfg.worker_id:
         env["WORKER_ID"] = cfg.worker_id
